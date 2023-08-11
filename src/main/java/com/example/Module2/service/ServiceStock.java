@@ -14,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ public class ServiceStock {
 	@Autowired
 	private RestTemplate restTemplate;
 	public Object getAllData(String stock) {
+
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("X-RapidAPI-Key", xKey);
@@ -34,14 +37,20 @@ public class ServiceStock {
 			String apiUrl ="https://yahoo-finance127.p.rapidapi.com/multi-quote/"+stock;
 
 
-			ResponseEntity<String> response = restTemplate.exchange(apiUrl,HttpMethod.GET,new HttpEntity<>(headers),String.class);
+			ResponseEntity<String> response = null;
+			//if (testApiResponse.getBody().equals("true")) {
+				response= restTemplate.exchange(apiUrl,HttpMethod.GET,new HttpEntity<>(headers),String.class);
+			//}
+
 //			log.info("Output is",response.getBody());
 
 //			System.out.println(response.getBody());
 //			return response.getBody();
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode root = mapper.readTree(response.getBody());
+			//Iterator<String> keys = root.
 			return root;
+			//return response.getBody();
 		}
 		catch(Exception e) {
 			log.error("Something wrong",e);
